@@ -48,19 +48,18 @@ public final class CounterServer extends DefaultSingleRecoverable {
         String s, uri = "mongodb://localhost:27017";
         try {
             s = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(command))).readLine();
+            System.out.println(s);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("bft");
             MongoCollection<Document> collection = database.getCollection("data");
-            Map<String, Object> docMap = new HashMap<>();
-            docMap.put(Integer.toString(iterations), s);
-            collection.insertOne(new Document(docMap));
+            collection.insertOne(new Document(Integer.toString(iterations), s));
         }
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream(4);
-            new DataOutputStream(out).writeChars(s);
+            new DataOutputStream(out).writeBytes(s);
             return out.toByteArray();
         } catch (IOException ex) {
             System.err.println("Invalid request received!");

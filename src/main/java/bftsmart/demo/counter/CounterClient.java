@@ -43,8 +43,7 @@ public class CounterClient {
                 BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(System.in));
                 s = bufferedReader.readLine();
                 ByteArrayOutputStream out = new ByteArrayOutputStream(4);
-                new DataOutputStream(out).writeChars(s);
-
+                new DataOutputStream(out).writeBytes(s);
                 System.out.print("Invocation " + i);
 //                byte[] reply = (inc == 0) ? counterProxy.invokeUnordered(out.toByteArray()) : counterProxy.invokeOrdered(out.toByteArray()); //magic happens here
                 byte[] reply= counterProxy.invokeUnordered(out.toByteArray());
